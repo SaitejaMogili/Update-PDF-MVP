@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AI Invoice Generator — Create branded invoices in 30 seconds. Free template, no watermark, GST-ready. By UpdatePDF.">
+<title>AI Invoice Generator — Free Branded Invoices | UpdatePDF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFFFF; --bg-soft: #F8FAFC; --bg-tinted: #F1F5F9; --bg-deep: #E2E8F0;
+  --ink: #0F172A; --ink-2: #1E293B; --ink-3: #475569; --ink-4: #94A3B8;
+  --line: #E2E8F0; --line-2: #EEF2F7;
+  --cobalt: #2563EB; --cobalt-deep: #1D4ED8; --cobalt-soft: #3B82F6; --cobalt-tint: #DBEAFE; --cobalt-mist: #EFF6FF;
+  --emerald: #059669; --emerald-deep: #047857; --emerald-tint: #D1FAE5; --emerald-mist: #ECFDF5;
+  --ai: #7C3AED; --ai-mist: #F5F3FF;
+  --gradient: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
+  --gradient-emerald: linear-gradient(135deg, #059669 0%, #34D399 100%);
+  --good: #059669; --warn: #D97706;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,.05), 0 1px 1px rgba(15,23,42,.03);
+  --shadow-md: 0 8px 28px -8px rgba(15,23,42,.10), 0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg: 0 28px 56px -16px rgba(15,23,42,.18), 0 8px 16px -8px rgba(15,23,42,.08);
+  --shadow-emerald: 0 12px 32px -8px rgba(5,150,105,.35);
+  --shadow-cobalt: 0 12px 32px -8px rgba(37,99,235,.35);
+  --font-display: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-ui: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quick: cubic-bezier(0.4, 0, 0.2, 1);
+  --max: 1240px; --gutter: 24px;
+  --radius: 14px; --radius-sm: 10px; --radius-lg: 20px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui); font-weight: 400; font-size: 16px; line-height: 1.55;
+  color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.005em; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; top: -200px; right: -150px; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(5,150,105,0.10) 0%, transparent 65%);
+  filter: blur(80px); pointer-events: none; z-index: 0;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 1; }
+
+.eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--emerald); }
+.gradient-text { background: var(--gradient-emerald); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* NAV */
+.nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.78); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid transparent; transition: border-color 0.2s var(--ease-quick); }
+.nav.scrolled { border-bottom-color: var(--line); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 16px var(--gutter); display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.brand { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.02em; }
+.brand-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--gradient); display: grid; place-items: center; color: white; font-family: var(--font-display); font-size: 14px; font-weight: 700; box-shadow: var(--shadow-cobalt); }
+.brand-mark::after { content: 'U'; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-link { font-size: 14px; font-weight: 500; color: var(--ink-2); transition: color 0.15s; }
+.nav-link:hover { color: var(--cobalt); }
+.nav-cta { display: flex; gap: 8px; align-items: center; }
+@media (max-width: 880px) { .nav-links { display: none; } }
+
+.breadcrumb { padding: 24px 0 0; font-size: 13px; color: var(--ink-3); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.breadcrumb a { color: var(--ink-3); transition: color 0.15s; }
+.breadcrumb a:hover { color: var(--emerald); }
+.breadcrumb-sep { color: var(--ink-4); }
+.breadcrumb-current { color: var(--ink); font-weight: 500; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 16px; border-radius: var(--radius-sm); font-family: var(--font-ui); font-size: 14px; font-weight: 500; transition: all 0.18s var(--ease-quick); white-space: nowrap; }
+.btn-primary { background: var(--cobalt); color: white; box-shadow: var(--shadow-cobalt); }
+.btn-primary:hover { background: var(--cobalt-deep); transform: translateY(-1px); }
+.btn-emerald { background: var(--emerald); color: white; box-shadow: var(--shadow-emerald); }
+.btn-emerald:hover { background: var(--emerald-deep); transform: translateY(-1px); box-shadow: 0 16px 36px -8px rgba(5,150,105,.45); }
+.btn-ghost { color: var(--ink-2); }
+.btn-ghost:hover { color: var(--cobalt); }
+.btn-outline { border: 1px solid var(--line); color: var(--ink); background: var(--bg); }
+.btn-outline:hover { border-color: var(--emerald); color: var(--emerald); }
+.btn-lg { height: 48px; padding: 0 22px; font-size: 15px; font-weight: 600; }
+.btn-arrow svg { transition: transform 0.2s var(--ease); }
+.btn-arrow:hover svg { transform: translateX(3px); }
+
+/* TOOL HERO with split form/preview */
+.tool-hero { padding: 32px 0 80px; }
+.tool-tag { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; background: var(--emerald-mist); color: var(--emerald-deep); border-radius: 100px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; margin-bottom: 24px; text-transform: uppercase; }
+.tool-tag-badge { width: 18px; height: 18px; border-radius: 5px; background: var(--gradient-emerald); display: grid; place-items: center; color: white; box-shadow: 0 1px 3px rgba(5,150,105,0.4); }
+.tool-tag-badge svg { width: 11px; height: 11px; }
+
+.tool-hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 5.2vw, 60px); line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 18px; color: var(--ink); }
+.tool-hero-sub { font-size: 18px; line-height: 1.55; color: var(--ink-3); margin-bottom: 28px; max-width: 560px; }
+
+/* THE GENERATION SPLIT — form on left, live preview on right */
+.gen-split {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 28px;
+  margin-top: 28px;
+  align-items: start;
+}
+.gen-form-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.gen-form-head {
+  padding: 14px 20px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gen-form-head-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gen-form-head-title-icon {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  background: var(--gradient-emerald);
+  display: grid; place-items: center;
+  color: white;
+}
+.gen-form-head-title-icon svg { width: 12px; height: 12px; }
+.gen-form-step {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.gen-form-body {
+  padding: 22px 20px 24px;
+  max-height: 560px;
+  overflow-y: auto;
+}
+.gen-form-body::-webkit-scrollbar { width: 6px; }
+.gen-form-body::-webkit-scrollbar-track { background: transparent; }
+.gen-form-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 100px; }
+
+.gen-section {
+  margin-bottom: 20px;
+}
+.gen-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.gen-section-label-line { flex: 1; height: 1px; background: var(--line); }
+
+.gen-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.gen-row.full { grid-template-columns: 1fr; }
+.gen-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.gen-row.two-one { grid-template-columns: 2fr 1fr; }
+
+.gen-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.gen-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.gen-field input,
+.gen-field textarea,
+.gen-field select {
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  color: var(--ink);
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  outline: none;
+  transition: all 0.15s;
+  width: 100%;
+}
+.gen-field input:focus,
+.gen-field textarea:focus,
+.gen-field select:focus {
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 3px var(--emerald-tint);
+}
+.gen-field textarea { resize: vertical; min-height: 60px; }
+
+.gen-line-items {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.gen-line-row {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr auto;
+  gap: 6px;
+  margin-bottom: 6px;
+  align-items: end;
+}
+.gen-line-row:last-child { margin-bottom: 0; }
+.gen-line-row .gen-field input { padding: 7px 10px; font-size: 12.5px; }
+.gen-line-del {
+  width: 30px; height: 30px;
+  border-radius: 6px;
+  display: grid; place-items: center;
+  color: var(--ink-4);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 0;
+}
+.gen-line-del:hover { color: #DC2626; border-color: #DC2626; background: rgba(220,38,38,0.04); }
+.gen-add-row {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--emerald);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.gen-add-row:hover { color: var(--emerald-deep); }
+
+/* AI ASSIST BANNER */
+.gen-ai-banner {
+  background: linear-gradient(135deg, var(--ai-mist) 0%, var(--cobalt-mist) 100%);
+  border: 1px solid var(--cobalt-tint);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.gen-ai-banner-icon {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
+  display: grid; place-items: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px -2px rgba(124,58,237,0.4);
+}
+.gen-ai-banner-text {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  flex: 1;
+  line-height: 1.45;
+}
+.gen-ai-banner-text strong { color: var(--ai); font-weight: 600; }
+.gen-ai-banner button {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ai);
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid var(--cobalt-tint);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.gen-ai-banner button:hover { border-color: var(--ai); }
+
+.gen-form-foot {
+  padding: 14px 20px;
+  border-top: 1px solid var(--line-2);
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.gen-credits-cost {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+.gen-credits-cost strong { color: var(--emerald); font-weight: 600; }
+
+/* PREVIEW PANEL */
+.gen-preview-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: sticky;
+  top: 96px;
+}
+.gen-preview-head {
+  padding: 14px 20px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gen-preview-head-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-deep);
+  padding: 3px;
+  border-radius: 7px;
+}
+.gen-preview-head-tab {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 5px;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.gen-preview-head-tab.active {
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.gen-preview-zoom {
+  display: flex;
+  gap: 4px;
+}
+.gen-preview-zoom button {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink-3);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.gen-preview-zoom button:hover { border-color: var(--emerald); color: var(--emerald); }
+
+.gen-preview-stage {
+  background: var(--bg-tinted);
+  padding: 28px;
+  min-height: 580px;
+  display: grid;
+  place-items: center;
+  background-image: radial-gradient(circle, var(--line-2) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.gen-preview-doc {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 8.5 / 11;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 18px 50px -12px rgba(15,23,42,0.18), 0 4px 12px rgba(15,23,42,0.05);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-ui);
+  position: relative;
+  overflow: hidden;
+}
+.gen-preview-doc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--cobalt);
+}
+.gen-preview-logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--cobalt);
+  letter-spacing: -0.02em;
+}
+.gen-preview-logo-sub {
+  font-size: 8px;
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+.gen-preview-meta {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-3);
+}
+.gen-preview-meta strong { color: var(--ink); font-size: 11px; display: block; margin-bottom: 2px; }
+
+.gen-preview-bill {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  font-size: 9px;
+}
+.gen-preview-bill-block strong {
+  display: block;
+  font-size: 7px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.gen-preview-bill-block-name {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 10px;
+}
+.gen-preview-bill-block-detail {
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.gen-preview-table {
+  width: 100%;
+  font-size: 8.5px;
+  margin-bottom: 14px;
+}
+.gen-preview-table thead th {
+  background: var(--bg-soft);
+  padding: 6px 5px;
+  text-align: left;
+  color: var(--ink-3);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.gen-preview-table thead th:last-child { text-align: right; }
+.gen-preview-table tbody td {
+  padding: 6px 5px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.gen-preview-table tbody td:last-child { text-align: right; font-weight: 500; }
+
+.gen-preview-totals {
+  margin-left: auto;
+  width: 50%;
+  font-size: 9px;
+}
+.gen-preview-totals-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  color: var(--ink-2);
+}
+.gen-preview-totals-row.grand {
+  border-top: 2px solid var(--cobalt);
+  padding-top: 6px;
+  margin-top: 4px;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 11px;
+}
+
+.gen-preview-foot {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-2);
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5px;
+  color: var(--ink-3);
+}
+
+@media (max-width: 1080px) {
+  .gen-split { grid-template-columns: 1fr; }
+  .gen-preview-card { position: static; }
+}
+
+/* ============== SECTIONS ============== */
+.section { padding: 100px 0; position: relative; z-index: 1; }
+.section-soft { background: var(--bg-soft); }
+.section-header { max-width: 720px; margin: 0 auto 56px; text-align: center; }
+.section-eyebrow-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--emerald); }
+.section-title { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 48px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; margin-bottom: 16px; color: var(--ink); }
+.section-sub { font-size: 17px; line-height: 1.55; color: var(--ink-3); max-width: 580px; margin: 0 auto; }
+
+/* HOW IT WORKS - 3 STEPS */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  position: relative;
+}
+.how-grid::before {
+  content: '';
+  position: absolute;
+  top: 36px; left: 12%; right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--emerald-tint) 0%, var(--cobalt-tint) 50%, var(--emerald-tint) 100%);
+  z-index: 0;
+}
+.how-step {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 30px 24px 24px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s var(--ease);
+}
+.how-step:hover { border-color: var(--emerald); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.how-step-num {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: var(--gradient-emerald);
+  display: grid; place-items: center;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-emerald);
+  position: relative;
+  overflow: hidden;
+}
+.how-step-num::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+}
+.how-step h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.how-step p { font-size: 14px; color: var(--ink-3); line-height: 1.55; }
+@media (max-width: 880px) {
+  .how-grid { grid-template-columns: 1fr; }
+  .how-grid::before { display: none; }
+}
+
+/* FEATURES BENTO */
+.features-bento {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 16px;
+}
+.feature {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: all 0.3s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.feature:hover { border-color: var(--emerald); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.feature-wide { grid-column: span 2; }
+.feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--gradient-emerald);
+  color: white;
+  display: grid; place-items: center;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 6px -2px rgba(5,150,105,0.4);
+}
+.feature h3 { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 8px; }
+.feature p { font-size: 14px; color: var(--ink-3); line-height: 1.55; }
+.feature-stat {
+  margin-top: auto;
+  padding-top: 20px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.feature-stat .accent { background: var(--gradient-emerald); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.feature-stat-label { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+@media (max-width: 880px) { .features-bento { grid-template-columns: 1fr; } .feature-wide { grid-column: span 1; } }
+
+/* USE CASES */
+.usecases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.usecase { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; transition: all 0.2s var(--ease); }
+.usecase:hover { border-color: var(--emerald); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.usecase-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--gradient-emerald); color: white; display: grid; place-items: center; margin-bottom: 16px; }
+.usecase h4 { font-family: var(--font-display); font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
+.usecase p { font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+@media (max-width: 880px) { .usecases { grid-template-columns: 1fr 1fr; } }
+
+/* RELATED TEMPLATES */
+.related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.related-tool { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; transition: all 0.2s var(--ease); cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
+.related-tool:hover { border-color: var(--emerald); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.related-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--gradient-emerald); color: white; display: grid; place-items: center; box-shadow: 0 2px 6px -2px rgba(5,150,105,0.4); }
+.related-name { font-family: var(--font-display); font-size: 14.5px; font-weight: 600; }
+.related-desc { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; }
+@media (max-width: 880px) { .related-grid { grid-template-columns: 1fr 1fr; } }
+
+/* FAQ */
+.faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.faq-item { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s; }
+.faq-item:hover, .faq-item[open] { border-color: var(--emerald); }
+.faq-q { padding: 20px 24px; font-family: var(--font-display); font-size: 16px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; letter-spacing: -0.01em; }
+.faq-q::-webkit-details-marker { display: none; }
+.faq-q-icon { width: 24px; height: 24px; border-radius: 8px; background: var(--emerald-mist); display: grid; place-items: center; color: var(--emerald); transition: transform 0.2s var(--ease); flex-shrink: 0; margin-left: 12px; }
+.faq-item[open] .faq-q-icon { transform: rotate(45deg); background: var(--emerald); color: white; }
+.faq-a { padding: 0 24px 20px; font-size: 14.5px; color: var(--ink-3); line-height: 1.6; }
+
+/* CTA */
+.cta { padding: 100px 0; }
+.cta-card { background: var(--ink); color: white; border-radius: 24px; padding: 72px 32px; position: relative; overflow: hidden; text-align: center; }
+.cta-card::before { content: ''; position: absolute; top: -150px; right: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(5,150,105,0.40) 0%, transparent 65%); filter: blur(40px); }
+.cta-card::after { content: ''; position: absolute; bottom: -150px; left: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(37,99,235,0.30) 0%, transparent 65%); filter: blur(40px); }
+.cta-inner { position: relative; z-index: 1; }
+.cta h2 { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 48px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; }
+.cta h2 .gradient { background: linear-gradient(135deg, #6EE7B7 0%, #93C5FD 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.cta p { font-size: 16px; color: rgba(255,255,255,0.65); margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+.cta-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cta .btn-outline { background: transparent; border-color: rgba(255,255,255,0.20); color: white; }
+.cta .btn-outline:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); }
+
+/* FOOTER */
+.footer { border-top: 1px solid var(--line); padding: 48px 0 32px; background: var(--bg-soft); }
+.footer-grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 48px; margin-bottom: 40px; }
+.footer-brand { max-width: 280px; }
+.footer-brand .brand { margin-bottom: 14px; }
+.footer-brand p { font-size: 13.5px; color: var(--ink-3); line-height: 1.55; }
+.footer-col h4 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; font-weight: 500; }
+.footer-col ul { list-style: none; display: grid; gap: 10px; }
+.footer-col a { font-size: 13.5px; color: var(--ink-2); transition: color 0.15s; }
+.footer-col a:hover { color: var(--cobalt); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 28px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); flex-wrap: wrap; gap: 16px; }
+@media (max-width: 880px) { .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; } }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.stagger > * { opacity: 0; transform: translateY(16px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
+.stagger.in > * { opacity: 1; transform: translateY(0); }
+.stagger.in > *:nth-child(1) { transition-delay: 0s; }
+.stagger.in > *:nth-child(2) { transition-delay: 0.07s; }
+.stagger.in > *:nth-child(3) { transition-delay: 0.14s; }
+.stagger.in > *:nth-child(4) { transition-delay: 0.21s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="brand-mark"></span><span>UpdatePDF</span></a>
+    <div class="nav-links">
+      <a href="/#tools" class="nav-link">Tools</a>
+      <a href="/#templates" class="nav-link">Studio</a>
+      <a href="/#modules" class="nav-link">Modules</a>
+      <a href="/#pricing" class="nav-link">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <a href="#" class="btn btn-primary">Start Free <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">Home</a><span class="breadcrumb-sep">›</span>
+    <a href="/#templates">Studio</a><span class="breadcrumb-sep">›</span>
+    <a href="/templates?cat=finance">Finance</a><span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Invoice Generator</span>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="tool-hero">
+  <div class="container">
+    <div style="text-align:center; max-width:680px; margin:0 auto 12px;">
+      <span class="tool-tag">
+        <span class="tool-tag-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></span>
+        Studio · Free Template · No Watermark
+      </span>
+      <h1>Branded invoices.<br><span class="gradient-text">Done in 30 seconds.</span></h1>
+      <p class="tool-hero-sub" style="margin: 0 auto 0;">Pick a layout, fill the fields, hit download. AI helps with line-item descriptions, tax calculation, and tone. GST-ready for India. Free forever.</p>
+    </div>
+
+    <!-- THE GENERATION SPLIT -->
+    <div class="gen-split">
+      <!-- FORM SIDE -->
+      <div class="gen-form-card">
+        <div class="gen-form-head">
+          <div class="gen-form-head-title">
+            <span class="gen-form-head-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+            Edit your invoice
+          </div>
+          <div class="gen-form-step">Step 1 of 1</div>
+        </div>
+
+        <div class="gen-form-body">
+          <!-- AI ASSIST -->
+          <div class="gen-ai-banner">
+            <div class="gen-ai-banner-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/></svg>
+            </div>
+            <div class="gen-ai-banner-text">
+              <strong>AI assist:</strong> Let AI write line-item descriptions and pick payment terms based on your industry.
+            </div>
+            <button>Apply</button>
+          </div>
+
+          <!-- BUSINESS INFO -->
+          <div class="gen-section">
+            <div class="gen-section-label">Your Business <span class="gen-section-label-line"></span></div>
+            <div class="gen-row two-one">
+              <div class="gen-field"><label>Business name</label><input type="text" value="Acme Recruiting LLC"></div>
+              <div class="gen-field"><label>Tax ID / GSTIN</label><input type="text" value="29ABCDE1234F2Z5"></div>
+            </div>
+            <div class="gen-row full">
+              <div class="gen-field"><label>Address</label><input type="text" value="221 W 4th St, Suite 200, San Francisco, CA 94158"></div>
+            </div>
+          </div>
+
+          <!-- BILL TO -->
+          <div class="gen-section">
+            <div class="gen-section-label">Bill To <span class="gen-section-label-line"></span></div>
+            <div class="gen-row two-one">
+              <div class="gen-field"><label>Client name</label><input type="text" value="Northwind Technologies, Inc."></div>
+              <div class="gen-field"><label>Invoice #</label><input type="text" value="INV-2026-0048"></div>
+            </div>
+            <div class="gen-row full">
+              <div class="gen-field"><label>Client address</label><input type="text" value="500 Market St, Boston, MA 02110"></div>
+            </div>
+            <div class="gen-row">
+              <div class="gen-field"><label>Issue date</label><input type="date" value="2026-05-08"></div>
+              <div class="gen-field"><label>Due date</label><input type="date" value="2026-06-07"></div>
+            </div>
+          </div>
+
+          <!-- LINE ITEMS -->
+          <div class="gen-section">
+            <div class="gen-section-label">Line Items <span class="gen-section-label-line"></span></div>
+            <div class="gen-line-items">
+              <div class="gen-line-row">
+                <div class="gen-field"><label>Description</label><input type="text" value="Senior Engineer — Permanent Placement"></div>
+                <div class="gen-field"><label>Qty</label><input type="number" value="1"></div>
+                <div class="gen-field"><label>Rate</label><input type="text" value="$18,000"></div>
+                <button class="gen-line-del" aria-label="Delete row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <div class="gen-line-row">
+                <div class="gen-field"><label>Description</label><input type="text" value="Recruiting Retainer (May 2026)"></div>
+                <div class="gen-field"><label>Qty</label><input type="number" value="1"></div>
+                <div class="gen-field"><label>Rate</label><input type="text" value="$3,500"></div>
+                <button class="gen-line-del" aria-label="Delete row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <div class="gen-line-row">
+                <div class="gen-field"><label>Description</label><input type="text" value="Reference Check Fee (3 candidates)"></div>
+                <div class="gen-field"><label>Qty</label><input type="number" value="3"></div>
+                <div class="gen-field"><label>Rate</label><input type="text" value="$250"></div>
+                <button class="gen-line-del" aria-label="Delete row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+            <a class="gen-add-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add line item</a>
+          </div>
+
+          <!-- TOTALS -->
+          <div class="gen-section">
+            <div class="gen-section-label">Totals & Notes <span class="gen-section-label-line"></span></div>
+            <div class="gen-row three">
+              <div class="gen-field"><label>Subtotal</label><input type="text" value="$22,250" disabled></div>
+              <div class="gen-field"><label>Tax (8%)</label><input type="text" value="$1,780"></div>
+              <div class="gen-field"><label>Total</label><input type="text" value="$24,030" disabled style="font-weight:700; color: var(--emerald-deep);"></div>
+            </div>
+            <div class="gen-row full">
+              <div class="gen-field"><label>Payment terms / notes</label><textarea>Net 30. Wire transfer to Chase Acct ****1234. ACH preferred. Late fee 1.5%/month.</textarea></div>
+            </div>
+          </div>
+
+          <!-- BRANDING -->
+          <div class="gen-section">
+            <div class="gen-section-label">Branding <span class="gen-section-label-line"></span></div>
+            <div class="gen-row">
+              <div class="gen-field"><label>Brand kit</label><select><option>Acme — Default</option><option>Acme — Light theme</option><option>+ Create new brand kit</option></select></div>
+              <div class="gen-field"><label>Accent color</label><input type="color" value="#2563EB" style="height:36px;padding:4px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gen-form-foot">
+          <span class="gen-credits-cost">Costs <strong>1 credit</strong> · Free template</span>
+          <button class="btn btn-emerald btn-arrow">
+            Generate PDF
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- PREVIEW SIDE -->
+      <div class="gen-preview-card">
+        <div class="gen-preview-head">
+          <div class="gen-preview-head-tabs">
+            <div class="gen-preview-head-tab active">Live preview</div>
+            <div class="gen-preview-head-tab">Source JSON</div>
+          </div>
+          <div class="gen-preview-zoom">
+            <button aria-label="Zoom out"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+            <button aria-label="Zoom in"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+
+        <div class="gen-preview-stage">
+          <div class="gen-preview-doc">
+            <div class="gen-preview-doc-head">
+              <div>
+                <div class="gen-preview-logo">ACME</div>
+                <div class="gen-preview-logo-sub">RECRUITING LLC</div>
+              </div>
+              <div class="gen-preview-meta">
+                <strong>INVOICE</strong>
+                INV-2026-0048<br>
+                Issued 08 May 2026<br>
+                Due 07 Jun 2026
+              </div>
+            </div>
+
+            <div class="gen-preview-bill">
+              <div class="gen-preview-bill-block">
+                <strong>From</strong>
+                <div class="gen-preview-bill-block-name">Acme Recruiting LLC</div>
+                <div class="gen-preview-bill-block-detail">221 W 4th St, Suite 200<br>San Francisco, CA 94158<br>GSTIN 29ABCDE1234F2Z5</div>
+              </div>
+              <div class="gen-preview-bill-block">
+                <strong>Bill To</strong>
+                <div class="gen-preview-bill-block-name">Northwind Technologies, Inc.</div>
+                <div class="gen-preview-bill-block-detail">500 Market St<br>Boston, MA 02110</div>
+              </div>
+            </div>
+
+            <table class="gen-preview-table">
+              <thead><tr><th>Description</th><th style="text-align:right;">Qty</th><th style="text-align:right;">Rate</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Senior Engineer — Permanent Placement</td><td style="text-align:right;">1</td><td style="text-align:right;">$18,000</td><td>$18,000</td></tr>
+                <tr><td>Recruiting Retainer (May 2026)</td><td style="text-align:right;">1</td><td style="text-align:right;">$3,500</td><td>$3,500</td></tr>
+                <tr><td>Reference Check Fee</td><td style="text-align:right;">3</td><td style="text-align:right;">$250</td><td>$750</td></tr>
+              </tbody>
+            </table>
+
+            <div class="gen-preview-totals">
+              <div class="gen-preview-totals-row"><span>Subtotal</span><span>$22,250</span></div>
+              <div class="gen-preview-totals-row"><span>Tax (8%)</span><span>$1,780</span></div>
+              <div class="gen-preview-totals-row grand"><span>Total Due</span><span>$24,030</span></div>
+            </div>
+
+            <div class="gen-preview-foot">
+              <div>Net 30 · Wire to Chase ****1234</div>
+              <div>Page 1 of 1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">How it works</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">From blank page to <span class="gradient-text">PDF in 30 seconds.</span></h2>
+    </div>
+
+    <div class="how-grid stagger">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <h3>Pick the template</h3>
+        <p>You're already here. The Invoice Generator is one of 100+ designer-grade templates in the Studio.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">2</div>
+        <h3>Fill or generate</h3>
+        <p>Type your details in the form, or hit "AI assist" to fill descriptions, tone, and payment terms automatically.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">3</div>
+        <h3>Download branded PDF</h3>
+        <p>Apply your brand kit (logo, colors, fonts), preview in real-time, and download. No watermark on free.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">Built for real businesses</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">Not just a form. <span class="gradient-text">A finance tool.</span></h2>
+      <p class="section-sub">Most "free invoice generators" are watermarked spreadsheets pretending to be SaaS. This one isn't.</p>
+    </div>
+
+    <div class="features-bento stagger">
+      <div class="feature feature-wide">
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44"/></svg></div>
+        <h3>AI line-item assist</h3>
+        <p>Type "recruiter retainer" and AI suggests reasonable rates, descriptions, and payment terms for that industry. Not generic boilerplate — actual market-rate suggestions you can edit.</p>
+        <div class="feature-stat"><span class="accent">94%</span><div class="feature-stat-label">of users keep AI's first suggestion</div></div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 1 1 0 20"/></svg></div>
+        <h3>GST-ready (India)</h3>
+        <p>Tax-compliant invoice format with GSTIN, HSN/SAC, and CGST/SGST/IGST splits.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3>No watermark</h3>
+        <p>Free tier means free. No "Made with X.com" footer. Ever.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Recurring invoices</h3>
+        <p>Save as recurring (Pro), auto-generate monthly with new dates and invoice numbers.</p>
+      </div>
+      <div class="feature feature-wide">
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18l-2 4H5z"/><path d="M5 7l2 12h10l2-12"/></svg></div>
+        <h3>Brand kits across all templates</h3>
+        <p>Set your logo, colors, and fonts once. They apply automatically to invoices, contracts, proposals, and every other template — for cohesive branding without designer work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">Used by</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">Who's <span class="gradient-text">invoicing fast?</span></h2>
+    </div>
+    <div class="usecases stagger">
+      <div class="usecase"><div class="usecase-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg></div><h4>Freelancers</h4><p>Bill clients in minutes, not hours. Save brand kit once, reuse forever.</p></div>
+      <div class="usecase"><div class="usecase-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><h4>Recruiters</h4><p>Per-placement invoices with retainer + reference check breakdowns.</p></div>
+      <div class="usecase"><div class="usecase-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg></div><h4>Indian SMBs</h4><p>GST-compliant invoices with HSN codes and tax splits, ready for filing.</p></div>
+      <div class="usecase"><div class="usecase-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h4>Agencies</h4><p>Multiple brand kits per client, recurring monthly invoices on Pro.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container" style="max-width:880px;">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">FAQ</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">Common <span class="gradient-text">questions.</span></h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item"><summary class="faq-q">Is it really free? <span class="faq-q-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="faq-a">Yes. The Invoice Generator template is free forever, with no watermark. You get 100 free credits per month, and each invoice costs 1 credit. So 100 free invoices per month. AI assist costs 1 extra credit. Pro lifts the cap and unlocks recurring invoices.</div></details>
+      <details class="faq-item"><summary class="faq-q">Does it support GST for India? <span class="faq-q-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="faq-a">Yes. Switch the template region to India. You'll get GSTIN field, HSN/SAC code field, and CGST/SGST/IGST tax splits. The output is filing-ready.</div></details>
+      <details class="faq-item"><summary class="faq-q">Can I save recurring invoices? <span class="faq-q-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="faq-a">On Pro plan. Save any invoice as recurring (weekly/monthly/quarterly). UpdatePDF generates the next invoice with auto-incremented number and updated dates, then emails it.</div></details>
+      <details class="faq-item"><summary class="faq-q">What's a brand kit? <span class="faq-q-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="faq-a">Your saved logo, primary color, secondary color, and font family. Apply with one click to any of 100+ templates. Free users get one brand kit; Pro gets unlimited; Business gets team-wide locked brand kits.</div></details>
+      <details class="faq-item"><summary class="faq-q">How is this different from Canva or Word? <span class="faq-q-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="faq-a">Canva is design-first; Word is layout-first. UpdatePDF is data-first. Type the numbers, get a PDF with the math right (subtotals, tax calc, totals). And the AI assist is genuinely good at industry-specific suggestions, not generic placeholder text.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED -->
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">More finance templates</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">Other ways to <span class="gradient-text">invoice and bill.</span></h2>
+    </div>
+    <div class="related-grid stagger">
+      <a href="/templates/gst-invoice" class="related-tool"><div class="related-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h18v18H3z"/></svg></div><div class="related-name">GST Invoice (India)</div><div class="related-desc">Filing-ready GST invoices with HSN codes.</div></a>
+      <a href="/templates/salary-slip" class="related-tool"><div class="related-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div><div class="related-name">Salary Slip</div><div class="related-desc">Compliant pay slips, bulk export.</div></a>
+      <a href="/cheque-printing" class="related-tool"><div class="related-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/></svg></div><div class="related-name">Cheque Printing</div><div class="related-desc">MICR-encoded cheques, US/CA/UK/IN.</div></a>
+      <a href="/templates/proposal" class="related-tool"><div class="related-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div class="related-name">Proposal Generator</div><div class="related-desc">AI-written sales proposals.</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-inner">
+        <h2>Stop building invoices. <span class="gradient">Just generate them.</span></h2>
+        <p>100 free credits. No card needed. Brand kit + recurring invoices on Pro.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-emerald btn-lg btn-arrow">Generate your first invoice <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+          <a href="/#templates" class="btn btn-outline btn-lg">Browse 100+ templates</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="brand"><span class="brand-mark"></span><span>UpdatePDF</span></a>
+        <p>The AI document workspace for modern professionals. Built by WestHive.</p>
+      </div>
+      <div class="footer-col"><h4>Tools</h4><ul><li><a href="#">Cheque Printing</a></li><li><a href="#">Edit PDF</a></li><li><a href="#">Compare PDFs</a></li><li><a href="#">All 80+ tools</a></li></ul></div>
+      <div class="footer-col"><h4>Studio</h4><ul><li><a href="#">Invoice Generator</a></li><li><a href="#">Resume Builder</a></li><li><a href="#">Contract Generator</a></li><li><a href="#">All 100+ templates</a></li></ul></div>
+      <div class="footer-col"><h4>Brain</h4><ul><li><a href="#">Multi-doc Chat</a></li><li><a href="#">Custom AI Agents</a></li><li><a href="#">Knowledge Graph</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Pricing</a></li><li><a href="#">Security</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 WestHive LLC · UpdatePDF</div><div>Made for teams that ship.</div></div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 8); });
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .stagger').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

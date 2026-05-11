@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Document Brain — your company's AI document memory. Cross-document chat with citations, custom agents, knowledge graph. By UpdatePDF.">
+<title>Document Brain — Your Company's Document Memory | UpdatePDF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFFFF; --bg-soft: #F8FAFC; --bg-tinted: #F1F5F9; --bg-deep: #E2E8F0;
+  --ink: #0F172A; --ink-2: #1E293B; --ink-3: #475569; --ink-4: #94A3B8;
+  --line: #E2E8F0; --line-2: #EEF2F7;
+  --cobalt: #2563EB; --cobalt-deep: #1D4ED8; --cobalt-tint: #DBEAFE; --cobalt-mist: #EFF6FF;
+  --indigo: #4F46E5; --indigo-deep: #4338CA; --indigo-tint: #E0E7FF;
+  --cyan: #06B6D4; --cyan-tint: #CFFAFE;
+  --ai: #7C3AED;
+  --gradient: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
+  --gradient-brain: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+  --gradient-brain-soft: linear-gradient(135deg, #E0E7FF 0%, #CFFAFE 100%);
+  --good: #059669; --warn: #D97706;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,.05);
+  --shadow-md: 0 8px 28px -8px rgba(15,23,42,.10), 0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg: 0 28px 56px -16px rgba(15,23,42,.18), 0 8px 16px -8px rgba(15,23,42,.08);
+  --shadow-brain: 0 12px 32px -8px rgba(79,70,229,.4);
+  --shadow-cobalt: 0 12px 32px -8px rgba(37,99,235,.35);
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --max: 1240px; --gutter: 24px;
+  --radius: 14px; --radius-sm: 10px; --radius-lg: 20px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-ui); font-size: 16px; line-height: 1.55; color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; letter-spacing: -0.005em; overflow-x: hidden; }
+body::before { content: ''; position: fixed; top: -200px; right: -150px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(79,70,229,0.10) 0%, transparent 65%); filter: blur(80px); pointer-events: none; z-index: 0; }
+body::after { content: ''; position: fixed; bottom: -200px; left: -150px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 65%); filter: blur(80px); pointer-events: none; z-index: 0; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 1; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--indigo); }
+.gradient-text { background: var(--gradient-brain); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* NAV */
+.nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.78); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+.nav.scrolled { border-bottom-color: var(--line); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 16px var(--gutter); display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.brand { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.02em; }
+.brand-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--gradient); display: grid; place-items: center; color: white; font-family: var(--font-display); font-size: 14px; font-weight: 700; box-shadow: var(--shadow-cobalt); }
+.brand-mark::after { content: 'U'; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-link { font-size: 14px; font-weight: 500; color: var(--ink-2); transition: color 0.15s; }
+.nav-link:hover { color: var(--cobalt); }
+.nav-cta { display: flex; gap: 8px; align-items: center; }
+@media (max-width: 880px) { .nav-links { display: none; } }
+
+.btn { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 16px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; transition: all 0.18s; white-space: nowrap; }
+.btn-primary { background: var(--cobalt); color: white; box-shadow: var(--shadow-cobalt); }
+.btn-primary:hover { background: var(--cobalt-deep); transform: translateY(-1px); }
+.btn-brain { background: var(--indigo); color: white; box-shadow: var(--shadow-brain); }
+.btn-brain:hover { background: var(--indigo-deep); transform: translateY(-1px); }
+.btn-ghost { color: var(--ink-2); }
+.btn-ghost:hover { color: var(--cobalt); }
+.btn-outline { border: 1px solid var(--line); color: var(--ink); background: var(--bg); }
+.btn-outline:hover { border-color: var(--indigo); color: var(--indigo); }
+.btn-lg { height: 48px; padding: 0 22px; font-size: 15px; font-weight: 600; }
+.btn-arrow svg { transition: transform 0.2s var(--ease); }
+.btn-arrow:hover svg { transform: translateX(3px); }
+
+/* HERO */
+.brain-hero { padding: 80px 0 60px; text-align: center; }
+.brain-hero-tag { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; background: var(--indigo-tint); color: var(--indigo-deep); border-radius: 100px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; margin-bottom: 28px; text-transform: uppercase; }
+.brain-hero-tag-icon { width: 18px; height: 18px; border-radius: 5px; background: var(--gradient-brain); display: grid; place-items: center; color: white; box-shadow: 0 1px 3px rgba(79,70,229,0.4); }
+.brain-hero-tag-icon svg { width: 11px; height: 11px; }
+.brain-hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(48px, 7vw, 88px); line-height: 1; letter-spacing: -0.04em; max-width: 920px; margin: 0 auto 24px; color: var(--ink); }
+.brain-hero-sub { font-size: 19px; line-height: 1.55; color: var(--ink-3); max-width: 640px; margin: 0 auto 32px; }
+.brain-hero-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+.brain-hero-trust { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; font-size: 13px; color: var(--ink-3); }
+.brain-hero-trust span { display: flex; align-items: center; gap: 6px; }
+.brain-hero-trust svg { color: var(--good); flex-shrink: 0; }
+
+/* THE BIG VIZ — interactive knowledge graph */
+.brain-viz {
+  position: relative;
+  height: 520px;
+  margin: 56px auto 0;
+  max-width: 1080px;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.brain-viz svg { width: 100%; height: 100%; }
+.brain-viz-overlay {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  max-width: 280px;
+  box-shadow: var(--shadow-md);
+}
+.brain-viz-overlay-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--indigo);
+  margin-bottom: 8px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.brain-viz-overlay h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.brain-viz-overlay p {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+.brain-viz-stats {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 20px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 18px;
+  box-shadow: var(--shadow-md);
+}
+.brain-viz-stat-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: var(--gradient-brain);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.brain-viz-stat-label {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+/* SECTIONS */
+.section { padding: 100px 0; position: relative; z-index: 1; }
+.section-soft { background: var(--bg-soft); }
+.section-header { max-width: 720px; margin: 0 auto 56px; text-align: center; }
+.section-eyebrow-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--indigo); }
+.section-title { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.06; margin-bottom: 16px; }
+.section-sub { font-size: 17px; line-height: 1.55; color: var(--ink-3); max-width: 580px; margin: 0 auto; }
+
+/* THE 6 BRAIN FEATURES */
+.brain-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.bf {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  transition: all 0.3s var(--ease);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.bf::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-brain-soft);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.bf:hover { border-color: var(--indigo); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.bf:hover::before { opacity: 0.4; }
+.bf > * { position: relative; z-index: 1; }
+.bf-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--gradient-brain);
+  color: white;
+  display: grid; place-items: center;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-brain);
+}
+.bf-icon::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+}
+.bf-icon svg { position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
+.bf-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--indigo-tint);
+  color: var(--indigo-deep);
+  padding: 3px 9px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+  font-weight: 500;
+  align-self: flex-start;
+}
+.bf h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.bf p {
+  font-size: 14.5px;
+  color: var(--ink-3);
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+.bf-mock {
+  margin-top: auto;
+  padding: 14px 16px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.bf-mock-q { color: var(--indigo); margin-bottom: 6px; }
+.bf-mock-q::before { content: '› '; font-weight: 600; }
+.bf-cite { display: inline-block; padding: 1px 6px; background: var(--indigo-tint); color: var(--indigo-deep); border-radius: 100px; font-size: 9.5px; margin: 0 2px; }
+@media (max-width: 880px) { .brain-features { grid-template-columns: 1fr; } }
+
+/* AGENTS SHOWCASE */
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.agent-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  transition: all 0.25s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.agent-card:hover { border-color: var(--indigo); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.agent-avatar {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: grid; place-items: center;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.agent-avatar::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+}
+.agent-avatar svg { color: white; position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
+.agent-avatar.legal { background: linear-gradient(135deg, #4F46E5 0%, #818CF8 100%); box-shadow: 0 4px 12px -4px rgba(79,70,229,0.5); }
+.agent-avatar.hr { background: linear-gradient(135deg, #059669 0%, #34D399 100%); box-shadow: 0 4px 12px -4px rgba(5,150,105,0.5); }
+.agent-avatar.finance { background: linear-gradient(135deg, #DC2626 0%, #F87171 100%); box-shadow: 0 4px 12px -4px rgba(220,38,38,0.5); }
+.agent-avatar.general { background: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%); box-shadow: 0 4px 12px -4px rgba(37,99,235,0.5); }
+.agent-card h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.agent-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.agent-card p { font-size: 13px; color: var(--ink-3); line-height: 1.5; margin-bottom: 14px; }
+.agent-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+.agent-skill {
+  font-size: 10.5px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-weight: 500;
+}
+@media (max-width: 880px) { .agents-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .agents-grid { grid-template-columns: 1fr; } }
+
+/* COMPARISON */
+.compare-wrap { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); max-width: 880px; margin: 0 auto; }
+.compare-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.compare-table th, .compare-table td { padding: 18px 24px; text-align: left; border-bottom: 1px solid var(--line-2); }
+.compare-table th { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; background: var(--bg-soft); }
+.compare-table th:first-child { font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.compare-table th.us { background: var(--ink); color: white; position: relative; }
+.compare-table th.us::before { content: ''; position: absolute; top: -3px; left: 0; right: 0; height: 3px; background: var(--gradient-brain); }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-table td.us { background: var(--indigo-tint); font-weight: 500; color: var(--indigo-deep); }
+.compare-table td.feature-name { font-weight: 500; color: var(--ink); }
+.compare-icon-good { color: var(--good); }
+.compare-icon-bad { color: var(--ink-4); }
+.compare-icon-mid { color: var(--warn); }
+@media (max-width: 760px) { .compare-table th, .compare-table td { padding: 12px; font-size: 13px; } .compare-table th { font-size: 11px; } }
+
+/* PRICING TIER SHOWCASE */
+.brain-pricing {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.bp {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  transition: all 0.3s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.bp.featured {
+  border-color: var(--indigo);
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(224,231,255,0.3) 100%);
+  position: relative;
+  transform: scale(1.03);
+}
+.bp.featured::before {
+  content: 'RECOMMENDED FOR BRAIN';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  background: var(--gradient-brain);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+.bp-name { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 14px; }
+.bp-price { font-family: var(--font-display); font-size: 40px; font-weight: 700; letter-spacing: -0.025em; line-height: 1; margin-bottom: 4px; }
+.bp-price-sub { font-size: 12.5px; color: var(--ink-3); margin-bottom: 24px; }
+.bp ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex: 1; }
+.bp li { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; color: var(--ink-2); }
+.bp li svg { color: var(--good); flex-shrink: 0; margin-top: 4px; }
+.bp li strong { color: var(--ink); }
+@media (max-width: 880px) { .brain-pricing { grid-template-columns: 1fr; } .bp.featured { transform: none; } }
+
+/* CTA */
+.cta { padding: 100px 0; }
+.cta-card { background: var(--ink); color: white; border-radius: 24px; padding: 72px 32px; position: relative; overflow: hidden; text-align: center; }
+.cta-card::before { content: ''; position: absolute; top: -150px; right: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(79,70,229,0.40) 0%, transparent 65%); filter: blur(40px); }
+.cta-card::after { content: ''; position: absolute; bottom: -150px; left: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(6,182,212,0.30) 0%, transparent 65%); filter: blur(40px); }
+.cta-inner { position: relative; z-index: 1; }
+.cta h2 { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; }
+.cta h2 .gradient { background: linear-gradient(135deg, #C4B5FD 0%, #67E8F9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.cta p { font-size: 16px; color: rgba(255,255,255,0.65); margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+.cta-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cta .btn-outline { background: transparent; border-color: rgba(255,255,255,0.20); color: white; }
+.cta .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
+
+/* FOOTER */
+.footer { border-top: 1px solid var(--line); padding: 48px 0 32px; background: var(--bg-soft); }
+.footer-grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 48px; margin-bottom: 40px; }
+.footer-brand { max-width: 280px; }
+.footer-brand .brand { margin-bottom: 14px; }
+.footer-brand p { font-size: 13.5px; color: var(--ink-3); }
+.footer-col h4 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; font-weight: 500; }
+.footer-col ul { list-style: none; display: grid; gap: 10px; }
+.footer-col a { font-size: 13.5px; color: var(--ink-2); transition: color 0.15s; }
+.footer-col a:hover { color: var(--cobalt); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 28px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); flex-wrap: wrap; gap: 16px; }
+@media (max-width: 880px) { .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; } }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.stagger > * { opacity: 0; transform: translateY(16px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
+.stagger.in > * { opacity: 1; transform: translateY(0); }
+.stagger.in > *:nth-child(1) { transition-delay: 0s; }
+.stagger.in > *:nth-child(2) { transition-delay: 0.06s; }
+.stagger.in > *:nth-child(3) { transition-delay: 0.12s; }
+.stagger.in > *:nth-child(4) { transition-delay: 0.18s; }
+.stagger.in > *:nth-child(5) { transition-delay: 0.24s; }
+.stagger.in > *:nth-child(6) { transition-delay: 0.30s; }
+
+/* Knowledge graph node animation */
+@keyframes nodepulse { 0%, 100% { r: 16; opacity: 1; } 50% { r: 19; opacity: 0.85; } }
+@keyframes edgeflow { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+.node-core { animation: nodepulse 3s ease-in-out infinite; }
+.edge-flow { stroke-dasharray: 4 4; animation: edgeflow 3s linear infinite; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="brand-mark"></span><span>UpdatePDF</span></a>
+    <div class="nav-links">
+      <a href="/#tools" class="nav-link">Tools</a>
+      <a href="/templates" class="nav-link">Studio</a>
+      <a href="/brain" class="nav-link" style="color: var(--indigo); font-weight: 600;">Brain</a>
+      <a href="/#pricing" class="nav-link">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <a href="#" class="btn btn-brain">Try Brain Free <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="brain-hero">
+  <div class="container">
+    <span class="brain-hero-tag">
+      <span class="brain-hero-tag-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="9" cy="19" r="2"/><circle cx="15" cy="19" r="2"/></svg>
+      </span>
+      Document Brain · Pro & Business
+    </span>
+    <h1>Your company's <span class="gradient-text">document memory.</span></h1>
+    <p class="brain-hero-sub">Connect every contract, policy, invoice, and report you've ever uploaded. Brain remembers them, links them, and answers across them — like Notion AI, but for the documents your business actually runs on.</p>
+    <div class="brain-hero-actions">
+      <a href="#" class="btn btn-brain btn-lg btn-arrow">Try Brain free for 14 days <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      <a href="#how" class="btn btn-outline btn-lg">See how it works</a>
+    </div>
+    <div class="brain-hero-trust">
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Citations on every answer</span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Files never train models</span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> SOC 2 + GDPR ready</span>
+    </div>
+
+    <!-- KNOWLEDGE GRAPH VIZ -->
+    <div class="brain-viz reveal">
+      <svg viewBox="0 0 1080 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.20"/>
+            <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="brainNode" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4F46E5"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+          </linearGradient>
+        </defs>
+
+        <!-- background glow -->
+        <ellipse cx="540" cy="260" rx="320" ry="260" fill="url(#centerGrad)"/>
+
+        <!-- edges (drawn first so nodes sit on top) -->
+        <g stroke="#C7D2FE" stroke-width="1.5" fill="none" opacity="0.6">
+          <line x1="540" y1="260" x2="220" y2="120"/>
+          <line x1="540" y1="260" x2="380" y2="80"/>
+          <line x1="540" y1="260" x2="700" y2="80"/>
+          <line x1="540" y1="260" x2="860" y2="120"/>
+          <line x1="540" y1="260" x2="160" y2="260"/>
+          <line x1="540" y1="260" x2="920" y2="260"/>
+          <line x1="540" y1="260" x2="220" y2="400"/>
+          <line x1="540" y1="260" x2="380" y2="440"/>
+          <line x1="540" y1="260" x2="700" y2="440"/>
+          <line x1="540" y1="260" x2="860" y2="400"/>
+          <!-- cross-doc edges (dashed = AI-discovered links) -->
+          <line x1="220" y1="120" x2="380" y2="80" stroke-dasharray="3 3"/>
+          <line x1="700" y1="80" x2="860" y2="120" stroke-dasharray="3 3"/>
+          <line x1="160" y1="260" x2="220" y2="400" stroke-dasharray="3 3"/>
+          <line x1="380" y1="440" x2="700" y2="440" stroke-dasharray="3 3"/>
+          <line x1="860" y1="400" x2="920" y2="260" stroke-dasharray="3 3"/>
+        </g>
+
+        <!-- animated edge from center -->
+        <line class="edge-flow" x1="540" y1="260" x2="540" y2="120" stroke="#7C3AED" stroke-width="2" stroke-dasharray="4 4" opacity="0.8"/>
+
+        <!-- document nodes with labels -->
+        <g font-family="JetBrains Mono, monospace" font-size="10" fill="#475569" text-anchor="middle">
+          <g><circle cx="220" cy="120" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="220" y="124">Vendor MSA</text></g>
+          <g><circle cx="380" cy="80" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="380" y="84">NDA-2024</text></g>
+          <g><circle cx="700" cy="80" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="700" y="84">Q3 Report</text></g>
+          <g><circle cx="860" cy="120" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="860" y="124">Audit</text></g>
+          <g><circle cx="160" cy="260" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="160" y="264">Policy v3</text></g>
+          <g><circle cx="920" cy="260" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="920" y="264">SOC2</text></g>
+          <g><circle cx="220" cy="400" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="220" y="404">Invoices</text></g>
+          <g><circle cx="380" cy="440" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="380" y="444">Payroll</text></g>
+          <g><circle cx="700" cy="440" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="700" y="444">Bank Stmt</text></g>
+          <g><circle cx="860" cy="400" r="22" fill="white" stroke="#C7D2FE" stroke-width="1.5"/><text x="860" y="404">Tax Filing</text></g>
+        </g>
+
+        <!-- center brain node -->
+        <circle class="node-core" cx="540" cy="260" r="16" fill="url(#brainNode)" filter="drop-shadow(0 8px 20px rgba(79,70,229,0.5))"/>
+        <circle cx="540" cy="260" r="36" fill="none" stroke="#7C3AED" stroke-width="1" opacity="0.3"/>
+        <circle cx="540" cy="260" r="56" fill="none" stroke="#7C3AED" stroke-width="1" opacity="0.15"/>
+        <text x="540" y="320" font-family="Plus Jakarta Sans" font-weight="700" font-size="14" fill="#0F172A" text-anchor="middle">Document Brain</text>
+        <text x="540" y="338" font-family="JetBrains Mono, monospace" font-size="10" fill="#475569" text-anchor="middle" letter-spacing="1">412 DOCS · 8,940 PAGES INDEXED</text>
+      </svg>
+
+      <div class="brain-viz-overlay">
+        <div class="brain-viz-overlay-tag">CROSS-DOC INSIGHT</div>
+        <h4>Brain found 5 connections.</h4>
+        <p>The vendor MSA references an NDA from 2024, which our Q3 report cites in section 4.2. AI surfaced the chain.</p>
+      </div>
+      <div class="brain-viz-stats">
+        <div>
+          <div class="brain-viz-stat-num">412</div>
+          <div class="brain-viz-stat-label">Documents</div>
+        </div>
+        <div>
+          <div class="brain-viz-stat-num">8.9K</div>
+          <div class="brain-viz-stat-label">Pages</div>
+        </div>
+        <div>
+          <div class="brain-viz-stat-num">94%</div>
+          <div class="brain-viz-stat-label">Accuracy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS / FEATURES -->
+<section class="section section-soft" id="how">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">Six features that compound</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">A new kind of <span class="gradient-text">document workspace.</span></h2>
+      <p class="section-sub">Most AI document tools work on one file at a time. Brain works on your entire library — and gets smarter the more you upload.</p>
+    </div>
+
+    <div class="brain-features stagger">
+      <div class="bf">
+        <div class="bf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <span class="bf-tag">Cross-doc</span>
+        <h3>Cross-doc semantic search</h3>
+        <p>Find anything across all uploaded files in milliseconds. Not keyword search — meaning search. Type what you mean, not what's in the document.</p>
+        <div class="bf-mock">
+          <div class="bf-mock-q">Find every clause about data retention</div>
+          → 7 matches across MSA-2024.pdf <span class="bf-cite">p.4</span>, Privacy-Policy.pdf <span class="bf-cite">p.2</span>, DPA.pdf <span class="bf-cite">p.6</span>
+        </div>
+      </div>
+
+      <div class="bf">
+        <div class="bf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="bf-tag">Multi-doc chat</span>
+        <h3>Chat across many documents</h3>
+        <p>Ask questions that span multiple files. "Compare termination clauses across our 5 vendor contracts." Brain answers in plain English with file-level citations.</p>
+        <div class="bf-mock">
+          <div class="bf-mock-q">Compare liability caps across our 5 vendor MSAs</div>
+          → Vendor A $1.2M <span class="bf-cite">A.pdf p.22</span>, B $2.5M <span class="bf-cite">B.pdf p.18</span>, C unlimited <span class="bf-cite">C.pdf p.31</span>
+        </div>
+      </div>
+
+      <div class="bf">
+        <div class="bf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <span class="bf-tag">Custom agents</span>
+        <h3>Pre-tuned AI agents per role</h3>
+        <p>Switch between Legal, HR, Finance, and General agents with one click. Each is fine-tuned with role-specific instructions, terminology, and risk frameworks.</p>
+        <div class="bf-mock">
+          <div class="bf-mock-q">[Legal mode] Review this MSA for unusual clauses</div>
+          → Found 3: §4 indemnity asymmetric, §7 IP assignment overbroad, §12 jurisdiction unfavorable
+        </div>
+      </div>
+
+      <div class="bf">
+        <div class="bf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><line x1="9" y1="12" x2="6" y2="7"/><line x1="15" y1="12" x2="18" y2="7"/></svg></div>
+        <span class="bf-tag">Knowledge graph</span>
+        <h3>See how documents connect</h3>
+        <p>Force-directed graph reveals which docs reference which others. Spot orphan files, contradictions, and unintended dependencies before they become problems.</p>
+        <div class="bf-mock">
+          <div class="bf-mock-q">Show me all docs referencing the 2024 NDA</div>
+          → 8 documents form a chain: Vendor MSA → SOW-2 → Amendment-A → ...
+        </div>
+      </div>
+
+      <div class="bf">
+        <div class="bf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <span class="bf-tag">Library health</span>
+        <h3>Score your entire library</h3>
+        <p>Run Document Health Score across every file in your Brain. Spot expiring contracts, missing signatures, off-market terms, and compliance gaps — all in one pass.</p>
+        <div class="bf-mock">
+          <div class="bf-mock-q">Library health check</div>
+          → 8 contracts expire in 60 days, 3 missing counter-signatures, 5 with unusual terms
+        </div>
+      </div>
+
+      <div class="bf">
+        <div class="bf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        <span class="bf-tag">Marketplace · v2</span>
+        <h3>Workflow Marketplace</h3>
+        <p>Pre-built document workflows you can install. "New employee onboarding," "Vendor due diligence," "Quarterly compliance check." Build your own and earn revenue share.</p>
+        <div class="bf-mock">
+          <div class="bf-mock-q">Install workflow: Vendor Onboarding</div>
+          → 5 steps · NDA → MSA → DPA → SOC2 review → Brain index. Run on every new vendor.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS SHOWCASE -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">Pre-tuned for your team</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">Four agents. <span class="gradient-text">One Brain.</span></h2>
+      <p class="section-sub">Each agent has its own system prompt, terminology, and risk model. Switch between them or build custom agents for your industry.</p>
+    </div>
+
+    <div class="agents-grid stagger">
+      <div class="agent-card">
+        <div class="agent-avatar legal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h4>Legal Agent</h4>
+        <div class="agent-role">Contract & policy review</div>
+        <p>Spots indemnity asymmetries, unusual jurisdictions, IP overreaches, and renewal traps. Trained on contract language patterns.</p>
+        <div class="agent-skills">
+          <span class="agent-skill">MSAs</span>
+          <span class="agent-skill">NDAs</span>
+          <span class="agent-skill">DPAs</span>
+          <span class="agent-skill">Risk flags</span>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar hr"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg></div>
+        <h4>HR Agent</h4>
+        <div class="agent-role">Resumes & people docs</div>
+        <p>Resume screening at scale. Cross-checks experience claims against job specs. Flags compensation outliers and bias indicators.</p>
+        <div class="agent-skills">
+          <span class="agent-skill">Resumes</span>
+          <span class="agent-skill">Offer letters</span>
+          <span class="agent-skill">Job descs</span>
+          <span class="agent-skill">Onboarding</span>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar finance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h4>Finance Agent</h4>
+        <div class="agent-role">Statements & reports</div>
+        <p>Reads bank statements, P&Ls, audit reports, tax filings. Surfaces variances, miscategorizations, and unusual transactions.</p>
+        <div class="agent-skills">
+          <span class="agent-skill">P&L</span>
+          <span class="agent-skill">Bank stmts</span>
+          <span class="agent-skill">Tax</span>
+          <span class="agent-skill">Audits</span>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar general"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+        <h4>General Agent</h4>
+        <div class="agent-role">Default · all docs</div>
+        <p>Balanced reasoning across any document type. Best for mixed libraries or when you're not sure which specialist applies.</p>
+        <div class="agent-skills">
+          <span class="agent-skill">Reports</span>
+          <span class="agent-skill">Memos</span>
+          <span class="agent-skill">Mixed</span>
+          <span class="agent-skill">Default</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">Why Brain not ChatGPT</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">A research tool, <span class="gradient-text">not a chatbot.</span></h2>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead><tr><th></th><th class="us">Brain</th><th>ChatGPT Enterprise</th><th>Glean</th><th>Notion AI</th></tr></thead>
+        <tbody>
+          <tr><td class="feature-name">Multi-doc chat with citations</td><td class="us">Yes</td><td>Limited</td><td>Yes</td><td>No</td></tr>
+          <tr><td class="feature-name">Knowledge graph view</td><td class="us">Yes</td><td>No</td><td>No</td><td>No</td></tr>
+          <tr><td class="feature-name">Custom AI agents per role</td><td class="us">4 built-in + custom</td><td>Custom GPTs</td><td>No</td><td>No</td></tr>
+          <tr><td class="feature-name">Library health scoring</td><td class="us">Yes</td><td>No</td><td>No</td><td>No</td></tr>
+          <tr><td class="feature-name">Files never train models</td><td class="us">Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td class="feature-name">Bundled PDF tools (80+)</td><td class="us">Yes</td><td>No</td><td>No</td><td>No</td></tr>
+          <tr><td class="feature-name">Starting price</td><td class="us"><strong>$49/seat</strong></td><td>$60/seat</td><td>~$40/seat</td><td>$10/seat</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow-row"><span class="section-eyebrow-line"></span><span class="eyebrow">Pricing</span><span class="section-eyebrow-line"></span></div>
+      <h2 class="section-title">Start small. <span class="gradient-text">Scale your Brain.</span></h2>
+      <p class="section-sub">Brain works at every tier. Pro unlocks multi-doc chat. Business unlocks unlimited library, custom agents, and team workflows.</p>
+    </div>
+
+    <div class="brain-pricing">
+      <div class="bp">
+        <div class="bp-name">Free</div>
+        <div class="bp-price">$0</div>
+        <div class="bp-price-sub">forever</div>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Up to <strong>5 docs</strong> in Brain</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Cross-doc semantic search</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>General Agent only</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>100 credits/month</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Start free</a>
+      </div>
+
+      <div class="bp featured">
+        <div class="bp-name">Pro</div>
+        <div class="bp-price">$19<span style="font-size:18px; color: var(--ink-3); font-weight:500;">/seat/mo</span></div>
+        <div class="bp-price-sub">14-day free trial</div>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Up to <strong>50 docs</strong> in Brain</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Multi-doc chat (up to 20 files)</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>All 4 AI agents (Legal/HR/Finance/General)</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Knowledge graph view</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>2,000 credits/month</li>
+        </ul>
+        <a href="#" class="btn btn-brain">Start 14-day trial</a>
+      </div>
+
+      <div class="bp">
+        <div class="bp-name">Business</div>
+        <div class="bp-price">$49<span style="font-size:18px; color: var(--ink-3); font-weight:500;">/seat/mo</span></div>
+        <div class="bp-price-sub">team plan, min 5 seats</div>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg><strong>Unlimited</strong> docs in Brain</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Multi-doc chat (up to 100 files)</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg><strong>Custom agents</strong> for your industry</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Workflow Marketplace + custom workflows</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Audit logs, SSO, SLA</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>10,000 credits/month</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Talk to sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-inner">
+        <h2>Stop searching for documents. <span class="gradient">Start asking them.</span></h2>
+        <p>Your first 5 documents are free. Add more as your Brain grows.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-brain btn-lg btn-arrow">Build your Brain — free <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+          <a href="/" class="btn btn-outline btn-lg">See all 80+ tools</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="/" class="brand"><span class="brand-mark"></span><span>UpdatePDF</span></a><p>The AI document workspace for modern professionals. Built by WestHive.</p></div>
+      <div class="footer-col"><h4>Tools</h4><ul><li><a href="#">Cheque Printing</a></li><li><a href="#">Edit PDF</a></li><li><a href="#">Compare PDFs</a></li><li><a href="#">All 80+ tools</a></li></ul></div>
+      <div class="footer-col"><h4>Studio</h4><ul><li><a href="#">Invoice Generator</a></li><li><a href="#">Resume Builder</a></li><li><a href="#">All 100+ templates</a></li></ul></div>
+      <div class="footer-col"><h4>Brain</h4><ul><li><a href="#">Multi-doc Chat</a></li><li><a href="#">Custom Agents</a></li><li><a href="#">Knowledge Graph</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Pricing</a></li><li><a href="#">Security</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 WestHive LLC · UpdatePDF</div><div>Made for teams that ship.</div></div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 8); });
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .stagger').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
