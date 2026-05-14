@@ -881,7 +881,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      debit_credits: {
+        Args: {
+          p_amount: number
+          p_reason: string
+          p_reference_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      refund_credits: {
+        Args: {
+          p_amount: number
+          p_reason: string
+          p_reference_id?: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
