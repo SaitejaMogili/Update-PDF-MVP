@@ -31,10 +31,15 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect unauthenticated users away from protected app routes
-  if (!user && request.nextUrl.pathname.startsWith("/app")) {
+  // Protected paths that require authentication
+  const protectedPaths = ["/dashboard", "/tools", "/brain", "/settings", "/templates"];
+  const isProtected = protectedPaths.some((p) => request.nextUrl.pathname.startsWith(p));
+
+  // Redirect unauthenticated users away from protected routes
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    url.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
 
@@ -45,7 +50,7 @@ export async function proxy(request: NextRequest) {
       request.nextUrl.pathname === "/signup")
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = "/app";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 

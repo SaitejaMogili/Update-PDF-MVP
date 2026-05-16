@@ -12,22 +12,22 @@ const BRAIN  = "linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)";
 const EMERALD = "linear-gradient(135deg, #059669 0%, #34D399 100%)";
 
 const tools = [
-  { icon: Merge,       label: "Merge PDF",       href: "/app/tools/merge",        gradient: COBALT },
-  { icon: Scissors,    label: "Split PDF",        href: "/app/tools/split",        gradient: COBALT },
-  { icon: Minimize2,   label: "Compress",         href: "/app/tools/compress",     gradient: COBALT },
-  { icon: FileText,    label: "PDF → Word",       href: "/app/tools/pdf-to-word",  gradient: COBALT },
-  { icon: Image,       label: "PDF → JPG",        href: "/app/tools/pdf-to-jpg",   gradient: COBALT },
-  { icon: Lock,        label: "Protect PDF",      href: "/app/tools/protect",      gradient: COBALT },
-  { icon: ScanText,    label: "OCR",              href: "/app/tools/ocr",          gradient: COBALT },
-  { icon: PenLine,     label: "Edit PDF",         href: "/app/tools/edit",         gradient: COBALT },
-  { icon: ClipboardList, label: "Fill Form",      href: "/app/tools/fill-form",    gradient: COBALT },
-  { icon: MessageSquare, label: "Chat with PDF",  href: "/app/tools/chat",         gradient: VIOLET },
-  { icon: Sparkles,    label: "Summarize",        href: "/app/tools/summarize",    gradient: VIOLET },
-  { icon: Languages,   label: "Translate",        href: "/app/tools/translate",    gradient: VIOLET },
-  { icon: HeartPulse,  label: "Health Score",     href: "/app/tools/health-score", gradient: VIOLET },
-  { icon: Mic,         label: "Voice → Doc",      href: "/app/tools/voice-to-doc", gradient: VIOLET },
-  { icon: Receipt,     label: "Cheque Printing",  href: "/app/tools/cheque",       gradient: RED },
-  { icon: BarChart2,   label: "Invoice Generator",href: "/app/tools/invoice",      gradient: RED },
+  { icon: Merge,       label: "Merge PDF",       href: "/tools/merge",        gradient: COBALT },
+  { icon: Scissors,    label: "Split PDF",        href: "/tools/split",        gradient: COBALT },
+  { icon: Minimize2,   label: "Compress",         href: "/tools/compress",     gradient: COBALT },
+  { icon: FileText,    label: "PDF → Word",       href: "/tools/pdf-to-word",  gradient: COBALT },
+  { icon: Image,       label: "PDF → JPG",        href: "/tools/pdf-to-jpg",   gradient: COBALT },
+  { icon: Lock,        label: "Protect PDF",      href: "/tools/protect",      gradient: COBALT },
+  { icon: ScanText,    label: "OCR",              href: "/tools/ocr",          gradient: COBALT },
+  { icon: PenLine,     label: "Edit PDF",         href: "/tools/edit",         gradient: COBALT },
+  { icon: ClipboardList, label: "Fill Form",      href: "/tools/fill-form",    gradient: COBALT },
+  { icon: MessageSquare, label: "Chat with PDF",  href: "/tools/chat",         gradient: VIOLET },
+  { icon: Sparkles,    label: "Summarize",        href: "/tools/summarize",    gradient: VIOLET },
+  { icon: Languages,   label: "Translate",        href: "/tools/translate",    gradient: VIOLET },
+  { icon: HeartPulse,  label: "Health Score",     href: "/tools/health-score", gradient: VIOLET },
+  { icon: Mic,         label: "Voice → Doc",      href: "/tools/voice-to-doc", gradient: VIOLET },
+  { icon: Receipt,     label: "Cheque Printing",  href: "/tools/cheque",       gradient: RED },
+  { icon: BarChart2,   label: "Invoice Generator",href: "/tools/invoice",      gradient: RED },
 ];
 
 const plans = [

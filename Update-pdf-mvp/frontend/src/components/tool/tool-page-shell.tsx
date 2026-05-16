@@ -27,11 +27,11 @@ export function ToolPageShell({
     <div className="max-w-3xl">
       {/* Breadcrumb */}
       <nav className="mb-6 flex items-center gap-1.5 text-xs text-slate-400">
-        <Link href="/app" className="hover:text-slate-600 transition-colors">
+        <Link href="/dashboard" className="hover:text-slate-600 transition-colors">
           Home
         </Link>
         <ChevronRight className="h-3 w-3" />
-        <Link href="/app/tools" className="hover:text-slate-600 transition-colors">
+        <Link href="/tools" className="hover:text-slate-600 transition-colors">
           Tools
         </Link>
         <ChevronRight className="h-3 w-3" />

@@ -16,18 +16,24 @@ import {
 
 const nav = [
   {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: FileText,
+    children: null,
+  },
+  {
     label: "Tools",
-    href: "/app/tools",
+    href: "/tools",
     icon: FileText,
     children: [
-      { label: "Basic", href: "/app/tools/basic", icon: Merge },
-      { label: "AI Tools", href: "/app/tools/ai", icon: Sparkles },
-      { label: "Finance", href: "/app/tools/finance", icon: DollarSign },
+      { label: "Basic", href: "/tools/basic", icon: Merge },
+      { label: "AI Tools", href: "/tools/ai", icon: Sparkles },
+      { label: "Finance", href: "/tools/finance", icon: DollarSign },
     ],
   },
-  { label: "Templates", href: "/app/templates", icon: LayoutTemplate },
-  { label: "Brain", href: "/app/brain", icon: Brain },
-  { label: "Settings", href: "/app/settings", icon: Settings },
+  { label: "Templates", href: "/templates", icon: LayoutTemplate },
+  { label: "Brain", href: "/brain", icon: Brain },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 const planColors: Record<string, string> = {
@@ -47,7 +53,7 @@ export function Sidebar({ email, fullName, plan, creditsBalance }: SidebarProps)
   const pathname = usePathname();
 
   const isActive = (href: string) =>
-    href === "/app" ? pathname === "/app" : pathname.startsWith(href);
+    href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r border-slate-200 bg-white">
