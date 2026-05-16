@@ -1,11 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import type { Database } from "@/types/supabase";
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient<Database>(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -26,16 +25,26 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session — do not remove, required for Auth to work
-  const { data: { user } } = await supabase.auth.getUser();
+  // Refresh session — required for Supabase Auth to work
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Redirect unauthenticated users away from protected app routes
-  if (
-    !user &&
-    request.nextUrl.pathname.startsWith("/app")
-  ) {
+  if (!user && request.nextUrl.pathname.startsWith("/app")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (
+    user &&
+    (request.nextUrl.pathname === "/login" ||
+      request.nextUrl.pathname === "/signup")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/app";
     return NextResponse.redirect(url);
   }
 
