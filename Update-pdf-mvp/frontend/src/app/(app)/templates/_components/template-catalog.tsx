@@ -159,7 +159,7 @@ export function TemplateCatalog({ templates }: Props) {
                 {/* CTA */}
                 <div className="mt-auto">
                   <Link
-                    href={`/app/templates/${template.slug}`}
+                    href={`/templates/${template.slug}`}
                     className="block w-full rounded-lg py-2 text-center text-sm font-semibold text-emerald-700 ring-1 ring-emerald-200 transition-colors hover:bg-emerald-50"
                   >
                     Use Template

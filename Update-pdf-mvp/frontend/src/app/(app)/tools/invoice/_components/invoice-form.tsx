@@ -239,7 +239,7 @@ export function InvoiceForm({ initialData, invoiceId }: InvoiceFormProps) {
         const { id } = await res.json();
         setSavedId(id);
         // Update URL to the edit page without full navigation
-        router.replace(`/app/tools/invoice/${id}`);
+        router.replace(`/tools/invoice/${id}`);
       }
       setJustSaved(true);
       setTimeout(() => setJustSaved(false), 3000);

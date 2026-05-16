@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   if (existingSub?.stripe_subscription_id && existingSub.status === "active") {
     const portal = await stripe.billingPortal.sessions.create({
       customer: existingSub.stripe_customer_id!,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/app/settings`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
     });
     return NextResponse.json({ url: portal.url });
   }
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     client_reference_id: user.id,
     metadata: { user_id: user.id, plan },
     subscription_data: { metadata: { user_id: user.id, plan } },
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/app/settings?billing=success`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?billing=success`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
     allow_promotion_codes: true,
   });

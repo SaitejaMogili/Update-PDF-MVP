@@ -55,7 +55,7 @@ export function WorkspaceList({ workspaces: initial }: Props) {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Failed to create workspace");
-      router.push(`/app/brain/${json.id}`);
+      router.push(`/brain/${json.id}`);
     } catch (err) {
       setCreateError(err instanceof Error ? err.message : "Something went wrong");
       setCreating(false);
@@ -131,7 +131,7 @@ export function WorkspaceList({ workspaces: initial }: Props) {
               </div>
 
               <button
-                onClick={() => router.push(`/app/brain/${ws.id}`)}
+                onClick={() => router.push(`/brain/${ws.id}`)}
                 className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-1.5 text-xs font-medium text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
               >
                 Open workspace

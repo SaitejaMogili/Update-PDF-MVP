@@ -69,7 +69,7 @@ export default function AIToolsPage() {
             return (
               <Link
                 key={tool.slug}
-                href={`/app/tools/${tool.slug}`}
+                href={`/tools/${tool.slug}`}
                 className="group flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-violet-200 hover:shadow-md"
               >
                 <div className="flex items-start justify-between">
