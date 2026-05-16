@@ -15,7 +15,7 @@ export async function GET(
 
   const { data: job, error } = await service
     .from("tool_jobs")
-    .select("id, status, error_message, output_file_id, files(storage_path)")
+    .select("id, status, error_message, output_file_id, files(storage_path, size_bytes)")
     .eq("id", jobId)
     .eq("user_id", user.id)
     .single();
@@ -25,14 +25,16 @@ export async function GET(
   }
 
   let downloadUrl: string | null = null;
+  let outputSizeBytes: number | null = null;
 
   if (job.status === "done" && job.output_file_id) {
     const outputFile = Array.isArray(job.files) ? job.files[0] : job.files;
     if (outputFile?.storage_path) {
       const { data: signed } = await service.storage
         .from("outputs")
-        .createSignedUrl(outputFile.storage_path, 3600); // 1-hour expiry
+        .createSignedUrl(outputFile.storage_path, 3600);
       downloadUrl = signed?.signedUrl ?? null;
+      outputSizeBytes = outputFile.size_bytes ?? null;
     }
   }
 
@@ -41,5 +43,6 @@ export async function GET(
     status: job.status,
     error: job.error_message ?? null,
     downloadUrl,
+    outputSizeBytes,
   });
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { formatDistanceToNow } from "date-fns";
 import {
   Merge,
   Scissors,
@@ -15,6 +16,9 @@ import {
   Receipt,
   Brain,
   ArrowRight,
+  CheckCircle2,
+  Clock,
+  XCircle,
 } from "lucide-react";
 
 const quickTools = [
@@ -64,17 +68,36 @@ const toolCategories = [
   },
 ];
 
+const TOOL_LABELS: Record<string, string> = {
+  merge: "Merge PDF", split: "Split PDF", compress: "Compress PDF",
+  "pdf-to-word": "PDF → Word", "pdf-to-jpg": "PDF → JPG", protect: "Protect PDF",
+  ocr: "OCR", edit: "Edit PDF", "fill-form": "Fill PDF Form",
+  chat: "Chat with PDF", summarize: "Summarize", translate: "Translate",
+  "health-score": "Health Score", "voice-to-doc": "Voice → Doc",
+  cheque: "Cheque Printing", invoice: "Invoice Generator",
+};
+
 export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, plan, credits_balance")
-    .eq("id", user.id)
-    .single();
+  const [profileResult, jobsResult] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("full_name, plan, credits_balance")
+      .eq("id", user.id)
+      .single(),
+    supabase
+      .from("tool_jobs")
+      .select("id, tool_slug, status, created_at, output_file_id")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(8),
+  ]);
 
+  const profile = profileResult.data;
+  const recentJobs = jobsResult.data ?? [];
   const firstName = profile?.full_name?.split(" ")[0] ?? "there";
 
   return (
@@ -191,11 +214,58 @@ export default async function DashboardPage() {
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">
           Recent activity
         </h2>
-        <div className="rounded-xl border border-dashed border-slate-200 bg-white px-6 py-12 text-center">
-          <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
-          <p className="text-sm font-medium text-slate-500">No documents yet</p>
-          <p className="mt-1 text-xs text-slate-400">Use a tool above to get started</p>
-        </div>
+        {recentJobs.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-slate-200 bg-white px-6 py-12 text-center">
+            <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
+            <p className="text-sm font-medium text-slate-500">No documents yet</p>
+            <p className="mt-1 text-xs text-slate-400">Use a tool above to get started</p>
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-100">
+            {recentJobs.map((job) => {
+              const label = TOOL_LABELS[job.tool_slug] ?? job.tool_slug;
+              const timeAgo = job.created_at
+                ? formatDistanceToNow(new Date(job.created_at), { addSuffix: true })
+                : "recently";
+              return (
+                <div key={job.id} className="flex items-center gap-3 px-5 py-3.5">
+                  <div className="shrink-0">
+                    {job.status === "done" ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                    ) : job.status === "error" ? (
+                      <XCircle className="h-4 w-4 text-red-400" />
+                    ) : (
+                      <Clock className="h-4 w-4 text-amber-400" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-slate-800">{label}</p>
+                    <p className="text-xs text-slate-400">{timeAgo}</p>
+                  </div>
+                  {job.status === "done" && job.output_file_id && (
+                    <Link
+                      href={`/api/jobs/${job.id}/download`}
+                      className="shrink-0 rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                    >
+                      Download
+                    </Link>
+                  )}
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                      job.status === "done"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : job.status === "error"
+                        ? "bg-red-50 text-red-700"
+                        : "bg-amber-50 text-amber-700"
+                    }`}
+                  >
+                    {job.status}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );
